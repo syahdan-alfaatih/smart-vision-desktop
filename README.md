@@ -70,6 +70,7 @@ smart-vision-desktop/
 ├── 🐍 main.py                  # Entry Point (Run this file to start)
 ├── 📝 README.md                # Documentation
 └── 📄 requirements.txt         # Dependency list
+```
 
 ## 👨‍💻 Author
 **Syahdan Alfaatih**
