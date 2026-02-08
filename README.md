@@ -48,7 +48,28 @@ Unlike standard tutorials, this system implements a **State Machine Architecture
     ```
 
 ## 📂 Project Structure
-smart-vision-desktop/ ├── modules/ │ ├── camera_thread.py # The AI Brain (State Machine & Logic) │ ├── data_manager.py # Database Handler (Pickle) │ └── ui_components.py # Sidebar & Windows ├── resources/ # Dlib Models (Not included in repo) ├── assets/ # Database storage ├── main.py # Entry Point └── requirements.txt # Dependencies
+
+```text
+smart-vision-desktop/
+│
+├── 📂 assets/                  # Local storage for app data
+│   └── 📂 database/
+│       ├── 📄 face_cache.pkl   # The AI Brain (Pickle database storing face encodings)
+│       └── 📂 raw_images/      # Folder for source images (optional backup)
+│
+├── 📂 modules/                 # Core application logic
+│   ├── 🐍 camera_thread.py     # AI Engine (State Machine, Hysteresis, Anti-Jitter)
+│   ├── 🐍 data_manager.py      # Database Handler (Add/Delete/Load logic)
+│   └── 🐍 ui_components.py     # GUI Components (Sidebar, Pop-ups, Layouts)
+│
+├── 📂 resources/               # Dlib AI Models (Download externally if not included)
+│   ├── 📦 shape_predictor_68_face_landmarks.dat
+│   └── 📦 dlib_face_recognition_resnet_model_v1.dat
+│
+├── 📄 .gitignore               # Git configuration (Ignored files)
+├── 🐍 main.py                  # Entry Point (Run this file to start)
+├── 📝 README.md                # Documentation
+└── 📄 requirements.txt         # Dependency list
 
 ## 👨‍💻 Author
 **Syahdan Alfaatih**
