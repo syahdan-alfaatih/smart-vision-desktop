@@ -1,0 +1,10 @@
+customtkinter==5.2.2
+packaging
+
+opencv-python
+Pillow
+numpy==1.26.4
+
+cmake
+dlib
+face-recognition

@@ -1,0 +1,26 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+env/
+.env
+
+# VS Code settings
+.vscode/
+
+# Database & Cache
+assets/database/face_cache.pkl
+assets/database/raw_images/*
+!assets/database/raw_images/.gitkeep
+
+# Heavy Models
+resources/*.dat
+resources/*.whl
+
+# Test Images
+target.jpg
+*.png
+*.jpg
