@@ -14,11 +14,9 @@ class SmartVisionApp(ctk.CTk):
 
         self.title("Smart Vision Desktop")
         
-        # --- [SETTING UKURAN FIX] ---
         self.geometry("960x600")
         self.resizable(False, False)
-        # ----------------------------
-
+        
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
         self.bind("<Escape>", lambda event: self.destroy())
@@ -54,10 +52,8 @@ class SmartVisionApp(ctk.CTk):
 
         self.update_idletasks()
         
-        # ===== INTEGRASI DATA MANAGER & SIDEBAR =====
         self.data_manager = DataManager()
         
-        # Sidebar sekarang punya db_callback
         self.sidebar = SidebarFrame(
             self, 
             start_callback=self.start_process,
@@ -66,7 +62,7 @@ class SmartVisionApp(ctk.CTk):
 
         self.camera_engine = CameraThread(video_source=0)
         self.last_size = (0, 0)
-        self.db_window = None # Variable buat nyimpen window database
+        self.db_window = None
 
     def resize_with_aspect_ratio(self, image, max_w, max_h):
         img_w, img_h = image.size
@@ -76,19 +72,15 @@ class SmartVisionApp(ctk.CTk):
         new_h = int(img_h * ratio)
         return image.resize((new_w, new_h), Image.BICUBIC)
 
-    # ===== FUNGSI BUKA MENU DATABASE =====
     def open_database_menu(self):
         if self.db_window is None or not self.db_window.winfo_exists():
-            # Buka Window Baru
             self.db_window = DatabaseWindow(self, self.data_manager)
             
-            # (Opsional) Saat window ditutup, update data kamera kalau lagi jalan
             self.db_window.protocol("WM_DELETE_WINDOW", self.on_db_close)
         else:
             self.db_window.focus()
 
     def on_db_close(self):
-        # Saat tutup database, kita sinkronkan data ke kamera (Live Update)
         if self.camera_engine:
             new_data = self.data_manager.load_database()
             self.camera_engine.update_database(new_data)
@@ -101,10 +93,8 @@ class SmartVisionApp(ctk.CTk):
         self.status_label.lift()
         self.update_idletasks()
         
-        # 1. Load Database
         loaded_data = self.data_manager.load_database()
         
-        # 2. Inject ke Kamera
         self.camera_engine.update_database(loaded_data)
         
         self.status_label.configure(text="INITIALIZING CAMERA...")
