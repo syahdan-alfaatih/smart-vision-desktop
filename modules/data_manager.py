@@ -6,15 +6,12 @@ import numpy as np
 
 class DataManager:
     def __init__(self):
-        # ===== KONFIGURASI PATH =====
-        # Kita pakai path relatif dari root project
         self.db_folder = "assets/database"
         self.db_file = os.path.join(self.db_folder, "face_cache.pkl")
         
         self.model_shape = "resources/shape_predictor_68_face_landmarks.dat"
         self.model_resnet = "resources/dlib_face_recognition_resnet_model_v1.dat"
 
-        # Pastikan folder database ada
         if not os.path.exists(self.db_folder):
             os.makedirs(self.db_folder)
             print(f">> [DATA] Folder dibuat: {self.db_folder}")
@@ -62,12 +59,9 @@ class DataManager:
         """
         print(f">> [PROCESS] Memulai proses Add Face: {name}")
 
-        # 1. VALIDASI FILE
         if not os.path.exists(image_path):
             return False, "File gambar tidak ditemukan!"
 
-        # 2. LOAD MODEL (HANYA SAAT DIBUTUHKAN)
-        # Ini strategi 'Separation of Concerns' biar CameraThread aman
         if not (os.path.exists(self.model_shape) and os.path.exists(self.model_resnet)):
             return False, "Model AI (Dlib) tidak ditemukan di folder resources!"
 
@@ -79,39 +73,32 @@ class DataManager:
         except Exception as e:
             return False, f"Gagal memuat model AI: {e}"
 
-        # 3. PROSES GAMBAR
         try:
-            # Load pakai OpenCV lalu convert ke RGB (Dlib butuh RGB)
             img_bgr = cv2.imread(image_path)
             if img_bgr is None:
                 return False, "Format gambar tidak didukung atau rusak."
             
             img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
             
-            # Detect Wajah
             faces = detector(img_rgb, 1)
             
-            # 4. STRICT MODE VALIDATION 👮
             if len(faces) == 0:
                 return False, "Tidak ditemukan wajah! Gunakan foto yang jelas."
             elif len(faces) > 1:
                 return False, f"Terdeteksi {len(faces)} wajah! Gunakan foto SATU orang saja."
             
-            # Kalau lolos (len == 1)
             print(">> [AI] Wajah valid. Memulai enkripsi biometrik...")
             shape = predictor(img_rgb, faces[0])
             encoding = np.array(facerec.compute_face_descriptor(img_rgb, shape))
 
-            # 5. SIMPAN KE DATABASE
             current_db = self.load_database()
             
-            # Cek duplikat nama (Opsional, tapi bagus buat UX)
             for user in current_db:
                 if user['name'].upper() == name.upper():
                     return False, f"Nama '{name}' sudah ada di database!"
 
             new_data = {
-                "name": name.upper(), # Kita standar-kan jadi Huruf Besar
+                "name": name.upper(),
                 "encoding": encoding
             }
             
@@ -146,5 +133,4 @@ class DataManager:
         Helper untuk UI: Mengambil list nama saja
         """
         db = self.load_database()
-        # Return list nama (sorted A-Z biar rapi)
         return sorted([u['name'] for u in db])
