@@ -27,7 +27,7 @@ Unlike standard tutorials, this system implements a **State Machine Architecture
 
 1.  **Clone the repository**
     ```bash
-    git clone [https://github.com/USERNAME/smart-vision-desktop.git](https://github.com/USERNAME/smart-vision-desktop.git)
+    git clone https://github.com/syahdan-alfaatih/smart-vision-desktop.git
     cd smart-vision-desktop
     ```
 
